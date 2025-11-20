@@ -1,4 +1,4 @@
-# 📚 Biblioteca API ⚠️ Atualização em breve!
+# 📚 Biblioteca API  
 
 API RESTful de uma **biblioteca digital**, construída com **C# .NET 8** e **SQL Server**, usando **Entity Framework Core** para persistência de dados.
 Permite gerenciamento completo de **livros**, **membros** e **empréstimos**, com documentação interativa via **Swagger**.
@@ -196,8 +196,8 @@ curl -X PUT \
 
 ## 🖊 Autor
 
-##Vinicius Pereira
 
-📧 [vinicius.pereiragoncalves.online@gmail.com](mailto:vinicius.pereiragoncalves.online@gmail.com)
-
+Vinicius Pereira  
+📧 vinicius.pereiragoncalves.online@gmail.com  
 📅 2025
+*/
