@@ -196,6 +196,8 @@ curl -X PUT \
 
 ## 🖊 Autor
 
-**Vinicius Pereira**
+##Vinicius Pereira
+
 📧 [vinicius.pereiragoncalves.online@gmail.com](mailto:vinicius.pereiragoncalves.online@gmail.com)
+
 📅 2025
