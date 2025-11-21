@@ -1,7 +1,15 @@
-# 📚 Biblioteca API  
+# 📚 Biblioteca API
 
-API RESTful de uma **biblioteca digital**, construída com **C# .NET 8** e **SQL Server**, usando **Entity Framework Core** para persistência de dados.
-Permite gerenciamento completo de **livros**, **membros** e **empréstimos**, com documentação interativa via **Swagger**.
+API RESTful de uma **biblioteca**, construída com **C# .NET 8** e **SQL Server**, usando **Entity Framework Core** para persistência de dados.
+
+O sistema permite o gerenciamento de:
+
+* **Clientes**
+* **Funcionários**
+* **Livros**
+* **Empréstimos**
+
+Com documentação interativa via **Swagger**.
 
 ---
 
@@ -11,49 +19,27 @@ Permite gerenciamento completo de **livros**, **membros** e **empréstimos**, co
 * **Entity Framework Core 8**
 * **SQL Server**
 * **ASP.NET Core Web API**
-* **Swagger / Swashbuckle** (documentação interativa)
-* **Postman** (testes externos)
+* **Swagger / Swashbuckle**
+* **Postman / Curl**
 
----
-
-## 📁 Estrutura do Projeto
-
-```
-Biblioteca/
-│
-├─ Controllers/
-│   ├─ LivroController.cs
-│   ├─ MembroController.cs
-│   └─ EmprestimoController.cs
-│
-├─ Data/
-│   └─ AppDbContext.cs
-│
-├─ Models/
-│   ├─ Livro.cs
-│   ├─ Membro.cs
-│   └─ Emprestimo.cs
-│
-├─ Program.cs
-└─ Biblioteca.csproj
-```
+##
 
 ---
 
 ## ⚙️ Pré-requisitos
 
 * [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
-* [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
-* Ferramenta de testes: **Swagger** ou **Postman**
+* SQL Server instalado
+* Ferramenta de teste: Swagger, Postman ou CURL
 
 ---
 
 ## 🔧 Configuração e Instalação
 
-1. Clone o projeto:
+1. Clone o repositório:
 
 ```bash
-git clone <seu-repositorio>
+git clone https://github.com/vinicius-9/Biblioteca
 cd Biblioteca
 ```
 
@@ -61,7 +47,7 @@ cd Biblioteca
 
 ```json
 "ConnectionStrings": {
-  "DefaultConnection": "Server=SEU_SERVIDOR;Database=BibliotecaDB;Trusted_Connection=True;"
+  "DefaultConnection": "Server=SEU_SERVIDOR;Database=BibliotecaDB;Trusted_Connection=True;Encrypt=False"
 }
 ```
 
@@ -72,20 +58,20 @@ dotnet restore
 dotnet build
 ```
 
-4. Crie o banco de dados e aplique migrações:
+4. Crie o banco e aplique migrações:
 
 ```bash
 dotnet ef migrations add InitialCreate
 dotnet ef database update
 ```
 
-5. Execute a API:
+5. Execute o projeto:
 
 ```bash
 dotnet run
 ```
 
-A API ficará disponível em:
+API disponível em:
 
 ```
 http://localhost:5097
@@ -93,111 +79,163 @@ http://localhost:5097
 
 ---
 
-## 🧩 Endpoints
-
-### 📖 Livros
-
-* **GET /api/livro** → Lista todos os livros
-* **GET /api/livro/{id}** → Busca livro por ID
-* **POST /api/livro** → Cria um livro
-
-Exemplo JSON:
-
-```json
-{
-  "titulo": "Dom Casmurro",
-  "autor": "Machado de Assis"
-}
-```
-
-* **PUT /api/livro/{id}** → Atualiza livro existente
-* **DELETE /api/livro/{id}** → Remove livro
+# 🧩 Endpoints
 
 ---
 
-### 👤 Membros
+# 👥 Clientes
 
-* **GET /api/membro** → Lista todos os membros
-* **GET /api/membro/{id}** → Busca membro por ID
-* **POST /api/membro** → Cria um membro
+### **GET /api/Cliente**
 
-Exemplo JSON:
+Lista todos os clientes.
+
+### **GET /api/Cliente/{id}**
+
+Busca cliente por ID.
+
+### **POST /api/Cliente**
+
+Cria um cliente.
 
 ```json
 {
-  "nome": "Rafael",
-  "cpf": "555-000",
-  "numero": "61 98228051"
+  "nome": "Maria Oliveira",
+  "cpf": "00000-00000"
 }
 ```
 
-* **PUT /api/membro/{id}** → Atualiza membro existente
-* **DELETE /api/membro/{id}** → Remove membro
+### **PUT /api/Cliente/{id}**
+
+Atualiza cliente.
+
+### **DELETE /api/Cliente/{id}**
+
+Remove um cliente.
 
 ---
 
-### 📝 Empréstimos
+# 🧑‍💼 Funcionários
 
-* **GET /api/emprestimo** → Lista todos os empréstimos
-* **GET /api/emprestimo/{id}** → Busca empréstimo por ID
-* **POST /api/emprestimo** → Cria empréstimo
+### **GET /api/Funcionario**
 
-Exemplo JSON:
+Lista funcionários.
+
+### **GET /api/Funcionario/{id}**
+
+Busca funcionário por ID.
+
+### **POST /api/Funcionario**
+
+Cria um funcionário.
+
+```json
+{
+  "nome": "Bruno Goncalves",
+  "cpf": "12345678900",
+  "numero": "3358-7917",
+  "cargo": "Bibliotecário"
+}
+```
+
+### **PUT /api/Funcionario/{id}**
+
+Atualiza.
+
+### **DELETE /api/Funcionario/{id}**
+
+Remove.
+
+---
+
+# 📖 Livros
+
+### **GET /api/Livro**
+
+Lista livros.
+
+### **GET /api/Livro/{id}**
+
+Busca livro.
+
+### **POST /api/Livro**
+
+```json
+{
+  "titulo": "O Senhor dos Anéis",
+  "autor": "J.R.R. Tolkien",
+  "ano": 1954
+}
+```
+
+### **PUT /api/Livro/{id}**
+
+Atualiza.
+
+### **DELETE /api/Livro/{id}**
+
+Remove livro.
+
+---
+
+# 📝 Empréstimos
+
+### **GET /api/Emprestimo**
+
+Lista empréstimos com dados completos.
+
+### **GET /api/Emprestimo/{id}**
+
+Busca por ID.
+
+### **POST /api/Emprestimo**
 
 ```json
 {
   "livroId": 1,
-  "membroId": 1,
-  "dataEmprestimo": "2025-11-20T10:00:00",
-  "dataPrevista": "2025-12-04T10:00:00"
+  "clienteId": 1,
+  "funcionarioId": 1,
+  "dataEmprestimo": "2025-11-20T23:00:00",
+  "dataPrevista": "2025-11-27T23:00:00"
 }
 ```
 
-* **PUT /api/emprestimo/{id}** → Atualiza empréstimo
-* **DELETE /api/emprestimo/{id}** → Remove empréstimo
+### **PUT /api/Emprestimo/{id}**
+
+Atualiza empréstimo.
+
+### **DELETE /api/Emprestimo/{id}**
+
+Remove empréstimo.
 
 ---
 
 ## 🛠 Testando a API
 
-### Swagger (recomendado para desenvolvimento):
+### Swagger:
 
 ```
 http://localhost:5097/swagger
 ```
 
-### Postman / CURL (exemplo de atualização de membro):
+### Exemplo via CURL (atualizar funcionário):
 
 ```bash
 curl -X PUT \
-  'http://localhost:5097/api/membro/1' \
-  -H 'accept: */*' \
-  -H 'Content-Type: application/json' \
-  -d '{
-        "id": 1,
-        "nome": "Rafael",
-        "cpf": "666-000",
-        "numero": "61 98228051"
-      }'
+  http://localhost:5097/api/Funcionario/1 \
+  -H "Content-Type: application/json" \
+  -d "{
+        \"id\": 1,
+        \"nome\": \"Bruno Goncalves\",
+        \"cpf\": \"12345678900\",
+        \"numero\": \"3358-7917\",
+        \"cargo\": \"Bibliotecário\"
+      }"
 ```
 
 ---
 
-## ⚠️ Observações Importantes
+## 👨‍💻 Autor
 
-* **IDs são chave primária** e não devem ser alterados manualmente.
-* Atualizações devem manter o mesmo ID da URL.
-* Ao criar empréstimos, a API valida se **Livro e Membro existem**.
-* Para alterações parciais, considere criar endpoints específicos ou DTOs.
-
----
-
-
-
-## 🖊 Autor
-
-
-Vinicius Pereira  
-📧 vinicius.pereiragoncalves.online@gmail.com  
+Vinicius Pereira
+📧 [vinicius.pereiragoncalves.online@gmail.com](mailto:vinicius.pereiragoncalves.online@gmail.com)
 📅 2025
-*/
