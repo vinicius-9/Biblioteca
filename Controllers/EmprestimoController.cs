@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Biblioteca.Data;
 using Biblioteca.Models;
-using Microsoft.EntityFrameworkCore;
+using Biblioteca.Dtos;
 
 namespace Biblioteca.Controllers;
 
@@ -10,69 +11,101 @@ namespace Biblioteca.Controllers;
 public class EmprestimoController : ControllerBase
 {
     private readonly AppDbContext _context;
-
-    public EmprestimoController(AppDbContext context)
-    {
-        _context = context;
-    }
+    public EmprestimoController(AppDbContext context) => _context = context;
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Emprestimo>>> GetEmprestimos()
+    public async Task<ActionResult<IEnumerable<EmprestimoResponse>>> GetEmprestimos()
     {
-        return await _context.Emprestimos.ToListAsync();
+        var emprestimos = await _context.Emprestimos
+            .Include(e => e.Cliente)
+            .Include(e => e.Funcionario)
+            .Include(e => e.Livro)
+            .ToListAsync();
+
+        return emprestimos.Select(e => new EmprestimoResponse
+        {
+            Id = e.Id,
+            ClienteId = e.ClienteId,
+            LivroId = e.LivroId,
+            FuncionarioId = e.FuncionarioId,
+            DataEmprestimo = e.DataEmprestimo,
+            DataPrevista = e.DataPrevista,
+            DataDevolucao = e.DataDevolucao
+        }).ToList();
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Emprestimo>> GetEmprestimo(int id)
+    public async Task<ActionResult<EmprestimoResponse>> GetEmprestimo(int id)
     {
-        var emp = await _context.Emprestimos.FindAsync(id);
-        if (emp == null)
-            return NotFound();
+        var e = await _context.Emprestimos.FindAsync(id);
+        if (e == null) return NotFound();
 
-        return emp;
+        return new EmprestimoResponse
+        {
+            Id = e.Id,
+            ClienteId = e.ClienteId,
+            LivroId = e.LivroId,
+            FuncionarioId = e.FuncionarioId,
+            DataEmprestimo = e.DataEmprestimo,
+            DataPrevista = e.DataPrevista,
+            DataDevolucao = e.DataDevolucao
+        };
     }
 
     [HttpPost]
-    public async Task<ActionResult<Emprestimo>> PostEmprestimo(Emprestimo emprestimo)
+    public async Task<ActionResult<EmprestimoResponse>> PostEmprestimo(EmprestimoRequest request)
     {
-        // Verificar se o Livro existe
-        var livro = await _context.Livros.FindAsync(emprestimo.LivroId);
-        if (livro == null)
-            return BadRequest("Livro não encontrado.");
+        var e = new Emprestimo
+        {
+            ClienteId = request.ClienteId,
+            LivroId = request.LivroId,
+            FuncionarioId = request.FuncionarioId,
+            DataEmprestimo = DateTime.Now,
+            DataPrevista = request.DataPrevista
+        };
 
-        // Verificar se o Membro existe
-        var membro = await _context.Membros.FindAsync(emprestimo.MembroId);
-        if (membro == null)
-            return BadRequest("Membro não encontrado.");
-
-        _context.Emprestimos.Add(emprestimo);
+        _context.Emprestimos.Add(e);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetEmprestimo), new { id = emprestimo.Id }, emprestimo);
+        return CreatedAtAction(
+            nameof(GetEmprestimo),
+            new { id = e.Id },
+            new EmprestimoResponse
+            {
+                Id = e.Id,
+                ClienteId = e.ClienteId,
+                LivroId = e.LivroId,
+                FuncionarioId = e.FuncionarioId,
+                DataEmprestimo = e.DataEmprestimo,
+                DataPrevista = e.DataPrevista
+            }
+        );
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutEmprestimo(int id, Emprestimo emprestimo)
+    public async Task<IActionResult> PutEmprestimo(int id, EmprestimoRequest request)
     {
-        if (id != emprestimo.Id)
-            return BadRequest();
+        var e = await _context.Emprestimos.FindAsync(id);
+        if (e == null) return NotFound();
 
-        _context.Entry(emprestimo).State = EntityState.Modified;
+        e.ClienteId = request.ClienteId;
+        e.LivroId = request.LivroId;
+        e.FuncionarioId = request.FuncionarioId;
+        e.DataPrevista = request.DataPrevista;
+
+        _context.Entry(e).State = EntityState.Modified;
         await _context.SaveChangesAsync();
-
         return NoContent();
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEmprestimo(int id)
     {
-        var emp = await _context.Emprestimos.FindAsync(id);
-        if (emp == null)
-            return NotFound();
+        var e = await _context.Emprestimos.FindAsync(id);
+        if (e == null) return NotFound();
 
-        _context.Emprestimos.Remove(emp);
+        _context.Emprestimos.Remove(e);
         await _context.SaveChangesAsync();
-
         return NoContent();
     }
 }

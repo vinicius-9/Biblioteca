@@ -1,13 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using Biblioteca.Models;
 
-namespace Biblioteca.Data;
-
-public class AppDbContext : DbContext
+namespace Biblioteca.Data
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) {}
+    public class AppDbContext : DbContext
+    {
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-    public DbSet<Livro> Livros => Set<Livro>();
-    public DbSet<Membro> Membros => Set<Membro>();
-    public DbSet<Emprestimo> Emprestimos => Set<Emprestimo>();
+        public DbSet<Cliente> Clientes => Set<Cliente>();
+        public DbSet<Funcionario> Funcionarios => Set<Funcionario>();
+        public DbSet<Livro> Livros => Set<Livro>();
+        public DbSet<Emprestimo> Emprestimos => Set<Emprestimo>();
+    }
 }

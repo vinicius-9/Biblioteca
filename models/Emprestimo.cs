@@ -1,10 +1,24 @@
-namespace Biblioteca.Models;
+using System;
+using System.ComponentModel.DataAnnotations;
 
-public class Emprestimo
+namespace Biblioteca.Models
 {
-    public int Id { get; set; }
-    public int LivroId { get; set; }
-    public int MembroId { get; set; }
-    public DateTime DataEmprestimo { get; set; }
-    public DateTime DataPrevista { get; set; }
+    public class Emprestimo
+    {
+        [Key]
+        public int Id { get; set; }
+
+        public int LivroId { get; set; }
+        public Livro Livro { get; set; } = null!;
+
+        public int ClienteId { get; set; }
+        public Cliente Cliente { get; set; } = null!;
+
+        public int FuncionarioId { get; set; }
+        public Funcionario Funcionario { get; set; } = null!;
+
+        public DateTime DataEmprestimo { get; set; }
+        public DateTime DataPrevista { get; set; }
+        public DateTime? DataDevolucao { get; set; }
+    }
 }

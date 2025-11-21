@@ -1,8 +1,13 @@
-namespace Biblioteca.Models;
+using System.ComponentModel.DataAnnotations;
 
-public class Livro
+namespace Biblioteca.Models
 {
-    public int Id { get; set; }
-    public string Titulo { get; set; } = "";
-    public string Autor { get; set; } = "";
+    public class Livro
+    {
+        [Key]
+        public int Id { get; set; }
+        public string Titulo { get; set; } = string.Empty;
+        public string Autor { get; set; } = string.Empty;
+        public int Ano { get; set; }
+    }
 }

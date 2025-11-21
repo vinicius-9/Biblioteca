@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Biblioteca.Data;
 using Biblioteca.Models;
-using Microsoft.EntityFrameworkCore;
+using Biblioteca.Dtos;
 
 namespace Biblioteca.Controllers;
 
@@ -10,64 +11,61 @@ namespace Biblioteca.Controllers;
 public class LivroController : ControllerBase
 {
     private readonly AppDbContext _context;
+    public LivroController(AppDbContext context) => _context = context;
 
-    public LivroController(AppDbContext context)
-    {
-        _context = context;
-    }
-
-    // GET: api/livro
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Livro>>> GetLivros()
+    public async Task<ActionResult<IEnumerable<LivroResponse>>> GetLivros()
     {
-        return await _context.Livros.ToListAsync();
+        return await _context.Livros
+            .Select(l => new LivroResponse { Id = l.Id, Titulo = l.Titulo, Autor = l.Autor, Ano = l.Ano })
+            .ToListAsync();
     }
 
-    // GET: api/livro/{id}
     [HttpGet("{id}")]
-    public async Task<ActionResult<Livro>> GetLivro(int id)
+    public async Task<ActionResult<LivroResponse>> GetLivro(int id)
     {
-        var livro = await _context.Livros.FindAsync(id);
-        if (livro == null)
-            return NotFound();
+        var l = await _context.Livros.FindAsync(id);
+        if (l == null) return NotFound();
 
-        return livro;
+        return new LivroResponse { Id = l.Id, Titulo = l.Titulo, Autor = l.Autor, Ano = l.Ano };
     }
 
-    // POST: api/livro
     [HttpPost]
-    public async Task<ActionResult<Livro>> PostLivro(Livro livro)
+    public async Task<ActionResult<LivroResponse>> PostLivro(LivroRequest request)
     {
-        _context.Livros.Add(livro);
+        var l = new Livro { Titulo = request.Titulo, Autor = request.Autor, Ano = request.Ano };
+        _context.Livros.Add(l);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetLivro), new { id = livro.Id }, livro);
+        return CreatedAtAction(
+            nameof(GetLivro),
+            new { id = l.Id },
+            new LivroResponse { Id = l.Id, Titulo = l.Titulo, Autor = l.Autor, Ano = l.Ano }
+        );
     }
 
-    // PUT: api/livro/{id}
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutLivro(int id, Livro livro)
+    public async Task<IActionResult> PutLivro(int id, LivroRequest request)
     {
-        if (id != livro.Id)
-            return BadRequest();
+        var l = await _context.Livros.FindAsync(id);
+        if (l == null) return NotFound();
 
-        _context.Entry(livro).State = EntityState.Modified;
+        l.Titulo = request.Titulo;
+        l.Autor = request.Autor;
+        l.Ano = request.Ano;
+        _context.Entry(l).State = EntityState.Modified;
         await _context.SaveChangesAsync();
-
         return NoContent();
     }
 
-    // DELETE: api/livro/{id}
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteLivro(int id)
     {
-        var livro = await _context.Livros.FindAsync(id);
-        if (livro == null)
-            return NotFound();
+        var l = await _context.Livros.FindAsync(id);
+        if (l == null) return NotFound();
 
-        _context.Livros.Remove(livro);
+        _context.Livros.Remove(l);
         await _context.SaveChangesAsync();
-
         return NoContent();
     }
 }
