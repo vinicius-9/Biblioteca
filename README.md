@@ -19,8 +19,8 @@ Com documentação interativa via **Swagger**.
 * **Entity Framework Core 8**
 * **SQL Server**
 * **ASP.NET Core Web API**
-* **Swagger / Swashbuckle**
-* **Postman / Curl**
+* **Swagger** 
+
 
 ##
 
@@ -213,6 +213,6 @@ Remove
 
 Vinicius Pereira
 
-vinicius.pereiragoncalves.online@gmai.com
+📧vinicius.pereiragoncalves.online@gmai.com
 
 📅 2025
