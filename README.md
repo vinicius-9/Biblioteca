@@ -212,5 +212,7 @@ Remove
 ## 👨‍💻 Autor
 
 Vinicius Pereira
-📧 [vinicius.pereiragoncalves.online@gmail.com](mailto:vinicius.pereiragoncalves.online@gmail.com)
+
+vinicius.pereiragoncalves.online@gmai.com
+
 📅 2025
