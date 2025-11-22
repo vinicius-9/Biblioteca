@@ -205,7 +205,7 @@ Atualiza empréstimo.
 
 ### **DELETE /api/Emprestimo/{id}**
 
-Remove empréstimo.
+Remove 
 
 ---
 
