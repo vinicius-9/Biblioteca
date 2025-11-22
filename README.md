@@ -194,8 +194,8 @@ Busca por ID.
   "livroId": 1,
   "clienteId": 1,
   "funcionarioId": 1,
-  "dataEmprestimo": "2025-11-20T23:00:00",
-  "dataPrevista": "2025-11-27T23:00:00"
+  "dataEmprestimo": "2025-11-20",
+  "dataPrevista": "2025-11 21"
 }
 ```
 
@@ -206,31 +206,6 @@ Atualiza empréstimo.
 ### **DELETE /api/Emprestimo/{id}**
 
 Remove empréstimo.
-
----
-
-## 🛠 Testando a API
-
-### Swagger:
-
-```
-http://localhost:5097/swagger
-```
-
-### Exemplo via CURL (atualizar funcionário):
-
-```bash
-curl -X PUT \
-  http://localhost:5097/api/Funcionario/1 \
-  -H "Content-Type: application/json" \
-  -d "{
-        \"id\": 1,
-        \"nome\": \"Bruno Goncalves\",
-        \"cpf\": \"12345678900\",
-        \"numero\": \"3358-7917\",
-        \"cargo\": \"Bibliotecário\"
-      }"
-```
 
 ---
 
